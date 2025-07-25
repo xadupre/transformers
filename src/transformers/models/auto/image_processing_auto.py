@@ -131,7 +131,7 @@ else:
             ("nat", ("ViTImageProcessor", "ViTImageProcessorFast")),
             ("nougat", ("NougatImageProcessor", "NougatImageProcessorFast")),
             ("oneformer", ("OneFormerImageProcessor", "OneFormerImageProcessorFast")),
-            ("owlv2", ("Owlv2ImageProcessor",)),
+            ("owlv2", ("Owlv2ImageProcessor", "Owlv2ImageProcessorFast")),
             ("owlvit", ("OwlViTImageProcessor", "OwlViTImageProcessorFast")),
             ("paligemma", ("SiglipImageProcessor", "SiglipImageProcessorFast")),
             ("perceiver", ("PerceiverImageProcessor", "PerceiverImageProcessorFast")),
@@ -264,7 +264,7 @@ def get_image_processor_config(
             'http://hostname': 'foo.bar:4012'}.` The proxies are used on each request.
         token (`str` or *bool*, *optional*):
             The token to use as HTTP bearer authorization for remote files. If `True`, will use the token generated
-            when running `huggingface-cli login` (stored in `~/.huggingface`).
+            when running `hf auth login` (stored in `~/.huggingface`).
         revision (`str`, *optional*, defaults to `"main"`):
             The specific model version to use. It can be a branch name, a tag name, or a commit id, since we use a
             git-based system for storing models and other artifacts on huggingface.co, so `revision` can be any
@@ -389,7 +389,7 @@ class AutoImageProcessor:
                 'http://hostname': 'foo.bar:4012'}.` The proxies are used on each request.
             token (`str` or *bool*, *optional*):
                 The token to use as HTTP bearer authorization for remote files. If `True`, will use the token generated
-                when running `huggingface-cli login` (stored in `~/.huggingface`).
+                when running `hf auth login` (stored in `~/.huggingface`).
             revision (`str`, *optional*, defaults to `"main"`):
                 The specific model version to use. It can be a branch name, a tag name, or a commit id, since we use a
                 git-based system for storing models and other artifacts on huggingface.co, so `revision` can be any
