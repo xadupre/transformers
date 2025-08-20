@@ -60,7 +60,7 @@ def initialize_tensor_parallelism(tp_plan, tp_size=None):
 
             backend_map = {"cuda": "nccl", "cpu": "gloo", "xpu": "xccl", "hpu": "hccl"}
             backend = backend_map.get(device_type)
-            if device_type == "cpu" and int(os.environ.get("CCL_WORKER_COUNT", 0)):
+            if device_type == "cpu" and int(os.environ.get("CCL_WORKER_COUNT", "0")):
                 backend = "ccl"
             if device_type == "xpu" and not is_torch_greater_or_equal("2.8", accept_dev=True):
                 backend = "ccl"
@@ -657,7 +657,7 @@ class RowwiseParallel(TensorParallelLayer):
     @staticmethod
     def _prepare_input_fn(input_layouts, desired_input_layouts, mod, inputs, device_mesh):
         if hasattr(mod, "bias") and mod.bias is not None:
-            mod._bias = mod.bias
+            mod._bias = mod.bias.to_local()
             mod.bias = None
 
         input_tensor = inputs[0]
@@ -677,7 +677,7 @@ class RowwiseParallel(TensorParallelLayer):
             outputs = outputs.redistribute(placements=output_layouts, async_op=True)
         outputs = outputs.to_local()  # otherwise the `+=` op will gather
         if hasattr(mod, "_bias"):
-            outputs += mod._bias
+            outputs = outputs + mod._bias
         # back to local tensor if use_local_output is True
         return outputs
 
@@ -997,7 +997,7 @@ def add_tensor_parallel_hooks_to_module(
 
 
 def shard_and_distribute_module(
-    model, param, empty_param, parameter_name, param_casting_dtype, is_contiguous, rank, device_mesh
+    model, param, empty_param, parameter_name, param_casting_dtype, is_contiguous, rank, device_mesh, set_param=True
 ):  # TODO: rename to shard_and_distribute_param
     r"""
     This function is called in `from_pretrained` when loading a model's checkpoints.
