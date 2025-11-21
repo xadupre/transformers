@@ -25,6 +25,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
+from ... import initialization as init
 from ...activations import ACT2FN
 from ...cache_utils import Cache, DynamicCache
 from ...generation import GenerationMixin
@@ -499,7 +500,13 @@ class Ernie4_5_MoePreTrainedModel(PreTrainedModel):
     def _init_weights(self, module):
         super()._init_weights(module)
         if isinstance(module, Ernie4_5_MoeStatics):
-            module.e_score_correction_bias.zero_()
+            init.zeros_(module.e_score_correction_bias)
+        elif isinstance(module, Ernie4_5_MoeExperts):
+            init.normal_(module.gate_up_proj, mean=0.0, std=self.config.initializer_range)
+            init.normal_(module.down_proj, mean=0.0, std=self.config.initializer_range)
+            if module.gate_up_proj_bias is not None:
+                init.zeros_(module.gate_up_proj_bias)
+                init.zeros_(module.down_proj_bias)
 
 
 @auto_docstring
