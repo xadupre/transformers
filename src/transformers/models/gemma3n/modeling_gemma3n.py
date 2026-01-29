@@ -53,7 +53,7 @@ from .configuration_gemma3n import Gemma3nAudioConfig, Gemma3nConfig, Gemma3nTex
 @dataclass
 @auto_docstring
 class Gemma3nAudioEncoderModelOutput(BaseModelOutputWithPooling):
-    """
+    r"""
     audio_mel_mask (`torch.FloatTensor`, *optional*):
         A torch.BoolTensor of shape `(batch_size, num_frames)`
     """
@@ -837,7 +837,7 @@ class Gemma3nAudioConformerFeedForward(nn.Module):
         self.ffw_layer_1 = nn.Linear(self.config.hidden_size, self.config.hidden_size * 4, bias=False)
         self.ffw_layer_2 = nn.Linear(self.config.hidden_size * 4, self.config.hidden_size, bias=False)
         self.post_layer_norm = Gemma3nRMSNorm(self.config.hidden_size)
-        self.post_layer_scale = torch.tensor(self.config.conf_residual_weight)
+        self.post_layer_scale = self.config.conf_residual_weight
 
     def forward(self, audio_encodings: torch.Tensor) -> torch.Tensor:
         residual = audio_encodings
