@@ -3599,6 +3599,7 @@ class ModelTesterMixin:
                 "jamba",
                 "kosmos-2",
                 "mllama",
+                "lighton_ocr",
                 "pixtral",
                 "sam",
                 "sam_hq",
