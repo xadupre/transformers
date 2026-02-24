@@ -142,14 +142,26 @@
   - isExpanded: false
     sections:
     - local: trainer
-      title: Trainer
+      title: Trainer overview
     - local: training
       title: Fine-tuning
+    title: Get started
+  - isExpanded: false
+    sections:
+    - local: trainer_customize
+      title: Subclassing Trainer methods
+    - local: trainer_callbacks
+      title: Callbacks
     - local: optimizers
       title: Optimizers
     - local: hpo_train
       title: Hyperparameter search
-    title: Trainer API
+    title: Customization
+  - isExpanded: false
+    sections:
+    - local: model_memory_anatomy
+      title: Model training anatomy
+    title: Performance
   - isExpanded: false
     sections:
     - local: accelerator_selection
@@ -182,8 +194,6 @@
     title: Hardware
   - local: peft
     title: PEFT
-  - local: model_memory_anatomy
-    title: Model training anatomy
   title: Training
 - isExpanded: false
   sections:
