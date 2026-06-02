@@ -125,13 +125,7 @@ class DeepseekV4Config(PreTrainedConfig):
         "layers.*.mlp.gate": "ep_router",
         "layers.*.mlp.experts.gate_up_proj": "grouped_gemm",
         "layers.*.mlp.experts.down_proj": "grouped_gemm",
-        "layers.*.mlp.experts": "moe_experts_allreduce",
-    }
-
-    base_model_fsdp_plan = {
-        "embed_tokens": "free_full_weight",
-        "layers.*": "free_full_weight",
-        "norm": "keep_full_weight",
+        "layers.*.mlp.experts": "moe_tp_experts",
     }
 
     vocab_size: int = 129280
@@ -310,9 +304,10 @@ class DeepseekV4Config(PreTrainedConfig):
                 **yarn,
                 "rope_theta": self.compress_rope_theta,
                 "partial_rotary_factor": self.partial_rotary_factor,
-                "attention_factor": 1.0,
             }
             compress.setdefault("rope_type", "default")
+            if compress["rope_type"] == "yarn":
+                compress.setdefault("attention_factor", 1.0)
             self.rope_parameters = {"main": main, "compress": compress}
 
 
